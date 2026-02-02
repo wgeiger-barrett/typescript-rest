@@ -1,9 +1,8 @@
 import debug from 'debug';
 import express from 'express';
-import _ from 'lodash-es';
+import * as _ from 'lodash-es';
 import { glob } from 'glob';
 import { pathToFileURL } from 'url';
-import path from 'path';
 import 'multer';
 import {
     FileLimits, HttpMethod, ParameterConverter,

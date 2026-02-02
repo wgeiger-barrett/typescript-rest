@@ -1,6 +1,6 @@
 import debug from 'debug';
 import express from 'express';
-import _ from 'lodash-es';
+import * as _ from 'lodash-es';
 import * as Errors from './model/errors.js';
 import { ServiceClass, ServiceMethod, ServiceProperty } from './model/metadata.js';
 import { DownloadBinaryData, DownloadResource, NoResponse } from './model/return-types.js';

@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import debug from 'debug';
 import express, { NextFunction, Request, Response } from 'express';
-import _ from 'lodash-es';
+import * as _ from 'lodash-es';
 import multer from 'multer';
 import * as Errors from './model/errors.js';
 import { ServiceClass, ServiceMethod } from './model/metadata.js';
