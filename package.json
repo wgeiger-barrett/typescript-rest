@@ -27,7 +27,7 @@
     "start": "tsc -w",
     "build": "npm run clean && tsc",
     "clean": "rimraf dist",
-    "prepare": "rimraf dist && tsc",
+    "prepublishOnly": "rimraf dist && tsc",
     "lint": "eslint ./src/**/*.ts ./test/**/*.ts",
     "lint:fix": "eslint --fix ./src/**/*.ts ./test/**/*.ts",
     "pretest": "cross-env NODE_ENV=test npm run build && npm run lint",
