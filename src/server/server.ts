@@ -1,14 +1,15 @@
-'use strict';
-
-import * as debug from 'debug';
-import * as express from 'express';
-import * as _ from 'lodash';
+import debug from 'debug';
+import express from 'express';
+import _ from 'lodash-es';
+import { glob } from 'glob';
+import { pathToFileURL } from 'url';
+import path from 'path';
 import 'multer';
 import {
     FileLimits, HttpMethod, ParameterConverter,
     ServiceAuthenticator, ServiceFactory
-} from './model/server-types';
-import { ServerContainer } from './server-container';
+} from './model/server-types.js';
+import { ServerContainer } from './server-container.js';
 
 const serverDebugger = debug('typescript-rest:server:build');
 
@@ -31,34 +32,35 @@ export class Server {
     /**
      * An alias for Server.loadServices()
      */
-    public static loadControllers(router: express.Router, patterns: string | Array<string>, baseDir?: string) {
-        Server.loadServices(router, patterns, baseDir);
+    public static async loadControllers(router: express.Router, patterns: string | Array<string>, baseDir?: string) {
+        await Server.loadServices(router, patterns, baseDir);
     }
 
     /**
      * Load all services from the files that matches the patterns provided
      */
-    public static loadServices(router: express.Router, patterns: string | Array<string>, baseDir?: string) {
+    public static async loadServices(router: express.Router, patterns: string | Array<string>, baseDir?: string) {
         if (!Server.locked) {
             serverDebugger('Loading typescript-rest services %j. BaseDir: %s', patterns, baseDir);
             const importedTypes: Array<Function> = [];
-            const requireGlob = require('require-glob');
             baseDir = baseDir || process.cwd();
-            const loadedModules: Array<any> = requireGlob.sync(patterns, {
-                cwd: baseDir
-            });
 
-            _.values(loadedModules).forEach(serviceModule => {
+            const patternArray = Array.isArray(patterns) ? patterns : [patterns];
+            const files = await glob(patternArray, { cwd: baseDir, absolute: true });
+
+            for (const file of files) {
+                const fileUrl = pathToFileURL(file).href;
+                const serviceModule = await import(fileUrl);
                 _.values(serviceModule)
                     .filter((service: Function) => typeof service === 'function')
                     .forEach((service: Function) => {
                         importedTypes.push(service);
                     });
-            });
+            }
 
             try {
                 Server.buildServices(router, ...importedTypes);
-            } catch (e) {
+            } catch (e: any) {
                 serverDebugger('Error loading services for pattern: %j. Error: %o', patterns, e);
                 serverDebugger('ImportedTypes: %o', importedTypes);
                 throw new TypeError(`Error loading services for pattern: ${JSON.stringify(patterns)}. Error: ${e.message}`);
@@ -106,11 +108,12 @@ export class Server {
      * Register a custom serviceFactory. It will be used to instantiate the service Objects
      * If You plan to use a custom serviceFactory, You must ensure to call this method before any typescript-rest service declaration.
      */
-    public static registerServiceFactory(serviceFactory: ServiceFactory | string) {
+    public static async registerServiceFactory(serviceFactory: ServiceFactory | string) {
         if (!Server.locked) {
             let factory: ServiceFactory;
             if (typeof serviceFactory === 'string') {
-                const mod = require(serviceFactory);
+                const fileUrl = serviceFactory.startsWith('file://') ? serviceFactory : pathToFileURL(serviceFactory).href;
+                const mod = await import(fileUrl);
                 factory = mod.default ? mod.default : mod;
             } else {
                 factory = serviceFactory as ServiceFactory;

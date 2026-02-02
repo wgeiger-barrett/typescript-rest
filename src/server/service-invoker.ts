@@ -1,14 +1,12 @@
-'use strict';
-
-import * as debug from 'debug';
-import * as express from 'express';
-import * as _ from 'lodash';
-import { Errors } from '../typescript-rest';
-import { ServiceClass, ServiceMethod, ServiceProperty } from './model/metadata';
-import { DownloadBinaryData, DownloadResource, NoResponse } from './model/return-types';
-import { HttpMethod, ReferencedResource, ServiceContext, ServiceProcessor } from './model/server-types';
-import { ParameterProcessor } from './parameter-processor';
-import { ServerContainer } from './server-container';
+import debug from 'debug';
+import express from 'express';
+import _ from 'lodash-es';
+import * as Errors from './model/errors.js';
+import { ServiceClass, ServiceMethod, ServiceProperty } from './model/metadata.js';
+import { DownloadBinaryData, DownloadResource, NoResponse } from './model/return-types.js';
+import { HttpMethod, ReferencedResource, ServiceContext, ServiceProcessor } from './model/server-types.js';
+import { ParameterProcessor } from './parameter-processor.js';
+import { ServerContainer } from './server-container.js';
 
 export class ServiceInvoker {
     private serviceClass: ServiceClass;

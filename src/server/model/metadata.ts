@@ -1,6 +1,6 @@
 'use strict';
 
-import { HttpMethod, ParserType, ServiceProcessor } from './server-types';
+import { HttpMethod, ParserType, ServiceProcessor } from './server-types.js';
 
 export interface ServiceProperty {
     type: ParamType;

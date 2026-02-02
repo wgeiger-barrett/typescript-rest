@@ -1,9 +1,13 @@
-import * as debug from 'debug';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import { Server } from './server';
+import debug from 'debug';
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { Server } from './server.js';
 
 const serverDebugger = debug('typescript-rest:server:config:build');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export class ServerConfig {
     public static configure() {
@@ -16,11 +20,13 @@ export class ServerConfig {
                     if (config.serviceFactory.indexOf('.') === 0) {
                         config.serviceFactory = path.join(process.cwd(), config.serviceFactory);
                     }
+                    // Note: registerServiceFactory is now async, but configure() is called at module load
+                    // Users should call this manually if they need to wait for it
                     Server.registerServiceFactory(config.serviceFactory);
                 }
             }
         } catch (e) {
-            // tslint:disable-next-line:no-console
+            // eslint-disable-next-line no-console
             console.error(e);
         }
     }

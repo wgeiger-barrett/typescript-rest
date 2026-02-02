@@ -1,19 +1,16 @@
-'use strict';
-
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as debug from 'debug';
-import * as express from 'express';
-import { NextFunction, Request, Response } from 'express';
-import * as _ from 'lodash';
-import * as multer from 'multer';
-import * as Errors from './model/errors';
-import { ServiceClass, ServiceMethod } from './model/metadata';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import debug from 'debug';
+import express, { NextFunction, Request, Response } from 'express';
+import _ from 'lodash-es';
+import multer from 'multer';
+import * as Errors from './model/errors.js';
+import { ServiceClass, ServiceMethod } from './model/metadata.js';
 import {
     FileLimits, HttpMethod, ParameterConverter,
     ParserType, ServiceAuthenticator, ServiceContext, ServiceFactory
-} from './model/server-types';
-import { ServiceInvoker } from './service-invoker';
+} from './model/server-types.js';
+import { ServiceInvoker } from './service-invoker.js';
 
 export class DefaultServiceFactory implements ServiceFactory {
     public create(serviceClass: any) {

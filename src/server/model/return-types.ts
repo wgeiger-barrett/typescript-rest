@@ -1,6 +1,6 @@
 'use strict';
 
-import { ReferencedResource } from './server-types';
+import { ReferencedResource } from './server-types.js';
 
 /**
  * Inform that a new resource was created. Server will

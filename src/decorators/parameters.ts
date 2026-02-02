@@ -2,8 +2,8 @@
 
 import * as _ from 'lodash';
 import 'reflect-metadata';
-import { MethodParam, ParamType, ServiceClass, ServiceMethod } from '../server/model/metadata';
-import { ServerContainer } from '../server/server-container';
+import { MethodParam, ParamType, ServiceClass, ServiceMethod } from '../server/model/metadata.js';
+import { ServerContainer } from '../server/server-container.js';
 
 
 /**

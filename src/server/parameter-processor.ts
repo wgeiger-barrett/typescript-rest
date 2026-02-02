@@ -1,10 +1,8 @@
-'use strict';
-
-import * as debug from 'debug';
-import { Errors } from '../typescript-rest';
-import { ParamType, ServiceProperty } from './model/metadata';
-import { ParameterConverter, ServiceContext } from './model/server-types';
-import { ServerContainer } from './server-container';
+import debug from 'debug';
+import * as Errors from './model/errors.js';
+import { ParamType, ServiceProperty } from './model/metadata.js';
+import { ParameterConverter, ServiceContext } from './model/server-types.js';
+import { ServerContainer } from './server-container.js';
 
 type ParameterContextMapper = (context: ServiceContext, property: ServiceProperty) => any;
 
